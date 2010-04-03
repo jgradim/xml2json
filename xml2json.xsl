@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+  <xsl:output indent="no" omit-xml-declaration="yes" method="text" encoding="UTF-8" media-type="text/x-json"/>
+  <xsl:strip-space elements="*" />
+  
+  <xsl:template match="*">
+    <xsl:if test="not(preceding-sibling::*)">
+      <xsl:text>{</xsl:text>
+    </xsl:if>
+    <xsl:text>"</xsl:text><xsl:value-of select="name()" /><xsl:text>": </xsl:text>
+    
+    <xsl:apply-templates select="child::node()" />
+    
+    <!-- close object or separate object attributes -->
+    <xsl:choose>
+      <xsl:when test="following-sibling::*">
+        <xsl:text>,</xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:text>}</xsl:text>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  
+  <!-- treat text values -->
+  <xsl:template match="text()">
+    <xsl:text>"</xsl:text>
+    <xsl:value-of select="." />
+    <xsl:text>"</xsl:text>
+  </xsl:template>
+
+</xsl:stylesheet>
