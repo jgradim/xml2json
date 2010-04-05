@@ -5,6 +5,9 @@
 	<children>
 		<child>
 			<name abbr="zeca" parent="self">XML Object child 1</name>
+			<number>50.0</number>
+			<number>0.0</number>
+			<number>-3</number>
 		</child>
 		<child>
 			<name>XML Object child 2</name>
