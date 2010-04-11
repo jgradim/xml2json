@@ -6,7 +6,9 @@
   <xsl:template match="*">
     <xsl:if test="not(preceding-sibling::*)">{</xsl:if>
     <xsl:text>"</xsl:text><xsl:value-of select="name()" /><xsl:text>": </xsl:text>
-    
+
+    <!-- attributes -->
+    <xsl:apply-templates select="@*" />
     <xsl:apply-templates select="child::node()" />
     
     <!-- close object or separate object attributes -->
@@ -16,6 +18,7 @@
   
   <!-- treat text values -->
   <xsl:template match="text()">
+    <xsl:text>"$text" :</xsl:text> 
     <xsl:choose>
       <xsl:when test="string(number(.)) = 'NaN'"><!-- string, escape and quote -->
         <xsl:text>"</xsl:text><xsl:value-of select="normalize-space(.)" /><xsl:text>"</xsl:text>
@@ -24,6 +27,15 @@
         <xsl:value-of select="normalize-space(.)" />
       </xsl:otherwise>
     </xsl:choose>
+  </xsl:template>
+
+  <xsl:template match="@*">
+    <xsl:text>"@</xsl:text>
+    <xsl:value-of select="name()" />
+    <xsl:text>": </xsl:text>
+    <xsl:value-of select="." />
+    <!--<xsl:text>,</xsl:text>-->
+    <xsl:if test="position() != last()">,</xsl:if>
   </xsl:template>
 
 </xsl:stylesheet>
