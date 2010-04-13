@@ -4,8 +4,7 @@
   <xsl:strip-space elements="*" />
 
   <xsl:template match="*">
-    <!--<xsl:if test="not(preceding-sibling::*)">{</xsl:if>-->
-    <xsl:text>"</xsl:text><xsl:value-of select="name()" /><xsl:text>": </xsl:text>
+    <xsl:text>"</xsl:text><xsl:value-of select="name()" /><xsl:text>":</xsl:text>
     <xsl:text>{</xsl:text>
 
     <!-- attributes -->
@@ -16,12 +15,11 @@
     <!-- close object or separate object attributes -->
     <xsl:text>}</xsl:text>
     <xsl:if test="following-sibling::*">,</xsl:if>
-    <!--><xsl:if test="not(following-sibling::*)">}</xsl:if>-->
   </xsl:template>
 
   <!-- treat text values -->
   <xsl:template match="text()">
-    <xsl:text>"$text" :</xsl:text>
+    <xsl:text>"$text":</xsl:text>
     <xsl:choose>
       <xsl:when test="string(number(.)) = 'NaN'"><!-- string, escape and quote -->
         <xsl:text>"</xsl:text><xsl:value-of select="normalize-space(.)" /><xsl:text>"</xsl:text>
@@ -35,8 +33,8 @@
   <xsl:template match="@*">
     <xsl:text>"@</xsl:text>
     <xsl:value-of select="name()" />
-    <xsl:text>": </xsl:text>
-    <xsl:value-of select="." />
+    <xsl:text>":</xsl:text>
+    <xsl:text>"</xsl:text><xsl:value-of select="." /><xsl:text>"</xsl:text>
     <xsl:if test="position() != last()">,</xsl:if>
   </xsl:template>
 
