@@ -3,6 +3,13 @@
   <xsl:output indent="no" omit-xml-declaration="yes" method="text" encoding="UTF-8" media-type="text/x-json"/>
   <xsl:strip-space elements="*" />
 
+  <!-- JSON object must be enclosed in an array -->
+  <xsl:template match="/">
+    <xsl:text>[{</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>}]</xsl:text>
+  </xsl:template>
+  
   <xsl:template match="*">
     <xsl:text>"</xsl:text><xsl:value-of select="name()" /><xsl:text>":</xsl:text>
     <xsl:text>{</xsl:text>
