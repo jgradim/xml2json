@@ -12,19 +12,17 @@
   
   <xsl:template match="*">
     <xsl:text>"</xsl:text><xsl:value-of select="name()" /><xsl:text>":</xsl:text>
-    <xsl:if test="not(*[count(../*[name(../*)=name(.)]) = count(../*) and count(../*) > 1])">
-    <xsl:text>{</xsl:text>
-    </xsl:if>
+
+    <!-- only open or close object declaration when not dealing with an array -->
+    <xsl:if test="not(*[count(../*[name(../*)=name(.)]) = count(../*) and count(../*) > 1])">{</xsl:if>
 
     <!-- attributes -->
     <xsl:apply-templates select="@*" />
     <xsl:if test="@* and child::node()">,</xsl:if><!-- separate attributes from child nodes/text if necessary -->
     <xsl:apply-templates select="child::node()" />
 
-    <!-- close object or separate object attributes -->
-    <xsl:if test="not(*[count(../*[name(../*)=name(.)]) = count(../*) and count(../*) > 1])">
-    <xsl:text>}</xsl:text>
-    </xsl:if>
+    <!-- close object (only when not dealing with an array) or separate object attributes -->
+    <xsl:if test="not(*[count(../*[name(../*)=name(.)]) = count(../*) and count(../*) > 1])">}</xsl:if>
     <xsl:if test="following-sibling::*">,</xsl:if>
   </xsl:template>
 
