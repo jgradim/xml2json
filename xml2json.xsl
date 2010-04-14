@@ -5,14 +5,16 @@
 
   <!-- JSON object must be enclosed in an array -->
   <xsl:template match="/">
-    <xsl:text>[{</xsl:text>
+    <xsl:text>{</xsl:text>
     <xsl:apply-templates />
-    <xsl:text>}]</xsl:text>
+    <xsl:text>}</xsl:text>
   </xsl:template>
   
   <xsl:template match="*">
     <xsl:text>"</xsl:text><xsl:value-of select="name()" /><xsl:text>":</xsl:text>
+    <xsl:if test="not(*[count(../*[name(../*)=name(.)]) = count(../*) and count(../*) > 1])">
     <xsl:text>{</xsl:text>
+    </xsl:if>
 
     <!-- attributes -->
     <xsl:apply-templates select="@*" />
@@ -20,7 +22,9 @@
     <xsl:apply-templates select="child::node()" />
 
     <!-- close object or separate object attributes -->
+    <xsl:if test="not(*[count(../*[name(../*)=name(.)]) = count(../*) and count(../*) > 1])">
     <xsl:text>}</xsl:text>
+    </xsl:if>
     <xsl:if test="following-sibling::*">,</xsl:if>
   </xsl:template>
 
@@ -45,6 +49,22 @@
     </xsl:call-template>
     
     <xsl:if test="position() != last()">,</xsl:if>
+  </xsl:template>
+
+  <!-- arrays -->
+  <xsl:template match="*[count(../*[name(../*)=name(.)]) = count(../*) and count(../*) > 1]">
+    <xsl:if test="not(preceding-sibling::*)">[</xsl:if>
+    <xsl:text>{"</xsl:text><xsl:value-of select="name()" /><xsl:text>":{</xsl:text>
+    <xsl:choose>
+      <xsl:when test="not(child::node())">
+        <xsl:text>null</xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates select="child::node()"/>
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:if test="following-sibling::*">}},</xsl:if>
+    <xsl:if test="not(following-sibling::*)">}}]</xsl:if>
   </xsl:template>
 
   <!-- Auxiliary template to be called for attribute values and tag text -->
