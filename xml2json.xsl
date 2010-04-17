@@ -53,14 +53,9 @@
   <xsl:template match="*[count(../*[name(../*)=name(.)]) = count(../*) and count(../*) > 1]">
     <xsl:if test="not(preceding-sibling::*)">[</xsl:if>
     <xsl:text>{"</xsl:text><xsl:value-of select="name()" /><xsl:text>":{</xsl:text>
-    <xsl:choose>
-      <xsl:when test="not(child::node())">
-        <xsl:text>null</xsl:text>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:apply-templates select="child::node()"/>
-      </xsl:otherwise>
-    </xsl:choose>
+    
+    <xsl:apply-templates select="child::node()"/>
+    
     <xsl:if test="following-sibling::*">}},</xsl:if>
     <xsl:if test="not(following-sibling::*)">}}]</xsl:if>
   </xsl:template>
