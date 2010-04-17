@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-  <xsl:output indent="no" omit-xml-declaration="yes" method="text" encoding="UTF-8" media-type="text/x-json"/>
+  <xsl:output indent="no" omit-xml-declaration="yes" method="text" encoding="UTF-8" media-type="text/x-json" />
   <xsl:strip-space elements="*" />
 
   <!-- JSON object must be enclosed in an array -->
@@ -54,7 +54,7 @@
     <xsl:if test="not(preceding-sibling::*)">[</xsl:if>
     <xsl:text>{"</xsl:text><xsl:value-of select="name()" /><xsl:text>":{</xsl:text>
     
-    <xsl:apply-templates select="child::node()"/>
+    <xsl:apply-templates select="child::node()" />
     
     <xsl:if test="following-sibling::*">}},</xsl:if>
     <xsl:if test="not(following-sibling::*)">}}]</xsl:if>
