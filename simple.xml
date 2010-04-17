@@ -4,7 +4,7 @@
 	<name>XML Object</name>
 	<children>
 		<child>
-			<name abbr="zeca" parent="self">XML Object child 1</name>
+			<name abbr="zeca" parent="self">XML \Object "child" 1</name>
 			<number>50.0</number>
 			<number>0.0</number>
 			<number>-3</number>
@@ -16,4 +16,4 @@
 		</child>
 	</children>
 </object>
-	
+

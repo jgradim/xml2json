@@ -9,7 +9,7 @@
     <xsl:apply-templates />
     <xsl:text>}</xsl:text>
   </xsl:template>
-  
+
   <xsl:template match="*">
     <xsl:text>"</xsl:text><xsl:value-of select="name()" /><xsl:text>":</xsl:text>
 
@@ -29,11 +29,11 @@
   <!-- process text values -->
   <xsl:template match="text()">
     <xsl:text>"$text":</xsl:text>
-    
+
     <xsl:call-template name="format-value">
       <xsl:with-param name="s" select="." />
     </xsl:call-template>
-    
+
   </xsl:template>
 
   <!-- process attributes and respectives values -->
@@ -41,11 +41,11 @@
     <xsl:text>"@</xsl:text>
     <xsl:value-of select="name()" />
     <xsl:text>":</xsl:text>
-    
+
     <xsl:call-template name="format-value">
       <xsl:with-param name="s" select="." />
     </xsl:call-template>
-    
+
     <xsl:if test="position() != last()">,</xsl:if>
   </xsl:template>
 
@@ -70,11 +70,53 @@
     <xsl:param name="s" />
     <xsl:choose>
       <xsl:when test="string(number($s)) = 'NaN'"><!-- string, escape and quote -->
-        <xsl:text>"</xsl:text><xsl:value-of select="normalize-space($s)" /><xsl:text>"</xsl:text>
+        <xsl:text>"</xsl:text>
+        <xsl:call-template name="escape-backslash">
+          <xsl:with-param name="string" select="normalize-space($s)" />
+        </xsl:call-template>
+        <xsl:text>"</xsl:text>
       </xsl:when>
       <xsl:otherwise><!-- number, print as it is -->
         <xsl:value-of select="normalize-space($s)" />
       </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <!-- Auxiliary template to be called for escaping backslashes -->
+  <xsl:template name="escape-backslash">
+    <xsl:param name="string"/>
+    <xsl:choose>
+     <xsl:when test='contains($string, "\")'>
+      <xsl:value-of select="substring-before($string,'\')" />
+	    <xsl:text>\\</xsl:text>
+	    <xsl:call-template name="escape-backslash">
+	     <xsl:with-param name="string"
+              select="substring-after($string, '\')" />
+	    </xsl:call-template>
+     </xsl:when>
+     <xsl:otherwise>
+      <xsl:call-template name="escape-quotes">
+        <xsl:with-param name="string" select="$string" />
+      </xsl:call-template>
+     </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <!-- Auxiliary template to be called for escaping quotes -->
+  <xsl:template name="escape-quotes">
+    <xsl:param name="string"/>
+    <xsl:choose>
+     <xsl:when test="contains($string, '&quot;')">
+      <xsl:value-of select="substring-before($string,'&quot;')" />
+	    <xsl:text>\"</xsl:text>
+	    <xsl:call-template name="escape-quotes">
+	     <xsl:with-param name="string"
+              select="substring-after($string, '&quot;')" />
+	    </xsl:call-template>
+     </xsl:when>
+     <xsl:otherwise>
+      <xsl:value-of select="$string" />
+     </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
 
