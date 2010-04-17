@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <?xml-stylesheet href="xml2json.xsl" type="text/xsl" ?>
 <object attr="50.0">
-	<name>XML Object</name>
+	<name>XML O\bject</name>
 	<children>
 		<child>
 			<name abbr="zeca" parent="self">XML \Object "child" 1</name>
@@ -10,7 +10,7 @@
 			<number>-3</number>
 		</child>
 		<child>
-			<name>XML Object child 2</name>
+			<name>XML Object ch"ild 2</name>
 			<zeca val="0.0" />
 			<br />
 		</child>

@@ -3,7 +3,6 @@
   <xsl:output indent="no" omit-xml-declaration="yes" method="text" encoding="UTF-8" media-type="text/x-json"/>
   <xsl:strip-space elements="*" />
 
-
   <!-- JSON object must be enclosed in an array -->
   <xsl:template match="/">
     <xsl:text>{</xsl:text>
@@ -68,7 +67,7 @@
       <xsl:when test="string(number($s)) = 'NaN'"><!-- string, escape and quote -->
         <xsl:text>"</xsl:text>
         <xsl:call-template name="escape-backslash">
-          <xsl:with-param name="string" select="normalize-space($s)" />
+          <xsl:with-param name="s" select="normalize-space($s)" />
         </xsl:call-template>
         <xsl:text>"</xsl:text>
       </xsl:when>
@@ -80,19 +79,18 @@
 
   <!-- Auxiliary template to be called for escaping backslashes -->
   <xsl:template name="escape-backslash">
-    <xsl:param name="string"/>
+    <xsl:param name="s"/>
     <xsl:choose>
-     <xsl:when test='contains($string, "\")'>
-      <xsl:value-of select="substring-before($string,'\')" />
+     <xsl:when test='contains($s, "\")'>
+      <xsl:value-of select="substring-before($s,'\')" />
 	    <xsl:text>\\</xsl:text>
 	    <xsl:call-template name="escape-backslash">
-	     <xsl:with-param name="string"
-              select="substring-after($string, '\')" />
+	     <xsl:with-param name="s" select="substring-after($s, '\')" />
 	    </xsl:call-template>
      </xsl:when>
      <xsl:otherwise>
       <xsl:call-template name="escape-quotes">
-        <xsl:with-param name="string" select="$string" />
+        <xsl:with-param name="s" select="$s" />
       </xsl:call-template>
      </xsl:otherwise>
     </xsl:choose>
@@ -100,18 +98,17 @@
 
   <!-- Auxiliary template to be called for escaping quotes -->
   <xsl:template name="escape-quotes">
-    <xsl:param name="string"/>
+    <xsl:param name="s"/>
     <xsl:choose>
-     <xsl:when test="contains($string, '&quot;')">
-      <xsl:value-of select="substring-before($string,'&quot;')" />
+     <xsl:when test="contains($s, '&quot;')">
+      <xsl:value-of select="substring-before($s,'&quot;')" />
 	    <xsl:text>\"</xsl:text>
 	    <xsl:call-template name="escape-quotes">
-	     <xsl:with-param name="string"
-              select="substring-after($string, '&quot;')" />
+	     <xsl:with-param name="s" select="substring-after($s, '&quot;')" />
 	    </xsl:call-template>
      </xsl:when>
      <xsl:otherwise>
-      <xsl:value-of select="$string" />
+      <xsl:value-of select="$s" />
      </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
