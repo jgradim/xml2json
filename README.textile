@@ -1,0 +1,37 @@
+h1. xml2json
+
+xml2json is an XSLT Stylesheet to transform arbitrary XML to a JSON representation
+
+h2. JSON Output
+
+This projects aims to produce JSON documents from arbitrary, well-formed XML documents.
+
+h2. CHANGELOG
+
+h3. v1.1 - April 18th, 2010
+
+Added support for same name, ungrouped elements. Ungrouped sibling elements with the same name are converted into JSON objects with an appended number representing their index (starting with 1). This allows the transformation to preserve the original structure of the document without any data loss.
+
+Example:
+
+<pre><code>
+	<an-element />
+	<tag>a</tag>
+	<tag>b</tag>
+	<tag>c</tag>
+	<another-element />
+</code></pre>
+
+is converted to
+
+<pre></code>
+	...
+	{"tag1":{"$text":"a"}},
+	{"tag2":{"$text":"b"}},
+	{"tag3":{"$text":"c"}}
+	...
+</code></pre>
+
+h3. v1.0 - April 17th, 2010
+
+First functioning version of the stylesheet, with support for text processing as strings or numbers, arrays, and special characters escaping (\ and ")
