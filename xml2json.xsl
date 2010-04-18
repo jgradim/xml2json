@@ -11,7 +11,13 @@
   </xsl:template>
 
   <xsl:template match="*">
-    <xsl:text>"</xsl:text><xsl:value-of select="name()" /><xsl:text>":</xsl:text>
+    <xsl:text>"</xsl:text><xsl:value-of select="name()" />
+    <!-- http://www.dpawson.co.uk/xsl/sect2/xpath.html 3. xpath to any node -->
+    <!-- add an index if siblings have the same name and are not grouped in a parent tag -->
+    <xsl:if test="count(../node()[name(.) = name(current())]) > 1">
+      <xsl:value-of select="count(preceding-sibling::*[name()=name(current())]) + 1"/>
+    </xsl:if>
+    <xsl:text>":</xsl:text>
 
     <!-- only open or close object declaration when not dealing with an array -->
     <xsl:if test="not(*[count(../*[name(../*)=name(.)]) = count(../*) and count(../*) > 1])">{</xsl:if>
@@ -59,6 +65,7 @@
     <xsl:if test="following-sibling::*">}},</xsl:if>
     <xsl:if test="not(following-sibling::*)">}}]</xsl:if>
   </xsl:template>
+
 
   <!-- Auxiliary template to be called for attribute values and tag text -->
   <xsl:template name="format-value">
