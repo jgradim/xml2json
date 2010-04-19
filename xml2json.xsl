@@ -29,17 +29,21 @@
 
     <!-- close object (only when not dealing with an array) or separate object attributes -->
     <xsl:if test="not(*[count(../*[name(../*)=name(.)]) = count(../*) and count(../*) > 1])">}</xsl:if>
-    <xsl:if test="following-sibling::*">,</xsl:if>
+    <xsl:if test="following-sibling::* or following-sibling::text()">,</xsl:if>
   </xsl:template>
 
-  <!-- process text values -->
+  <!-- process text nodes -->
   <xsl:template match="text()">
-    <xsl:text>"$text":</xsl:text>
-
+    <xsl:text>"$text</xsl:text>
+	<xsl:if test="count(../text()) > 1">
+		<xsl:value-of select="count(preceding-sibling::text()) + 1"/>
+	</xsl:if>
+	<xsl:text>":</xsl:text>
+	
     <xsl:call-template name="format-value">
       <xsl:with-param name="s" select="." />
     </xsl:call-template>
-
+	<xsl:if test="following-sibling::*">,</xsl:if>
   </xsl:template>
 
   <!-- process attributes and respectives values -->
@@ -121,4 +125,3 @@
   </xsl:template>
 
 </xsl:stylesheet>
-
