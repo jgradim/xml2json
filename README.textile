@@ -8,6 +8,10 @@ This projects aims to produce JSON documents from arbitrary, well-formed XML doc
 
 h2. CHANGELOG
 
+h3. v1.2 - April 19th, 2010
+
+Added support for elements with multiple children text nodes. Text nodes are now named $text1, $text2, etc if more than one sibling text node is present.
+
 h3. v1.1 - April 18th, 2010
 
 Added support for same name, ungrouped elements. Ungrouped sibling elements with the same name are converted into JSON objects with an appended number representing their index (starting with 1). This allows the transformation to preserve the original structure of the document without any data loss.
