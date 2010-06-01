@@ -64,6 +64,7 @@
     <xsl:if test="not(preceding-sibling::*)">[</xsl:if>
     <xsl:text>{"</xsl:text><xsl:value-of select="name()" /><xsl:text>":{</xsl:text>
 
+    <xsl:apply-templates select="@*" />
     <xsl:apply-templates select="child::node()" />
 
     <xsl:if test="following-sibling::*">}},</xsl:if>
