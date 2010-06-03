@@ -17,10 +17,10 @@
     <xsl:if test="count(../node()[name(.) = name(current())]) > 1">
       <xsl:value-of select="count(preceding-sibling::*[name()=name(current())]) + 1"/>
     </xsl:if>
-    <xsl:text>":</xsl:text>
+    <xsl:text>":{</xsl:text>
 
     <!-- only open or close object declaration when not dealing with an array -->
-    <xsl:if test="not(*[count(../*[name(../*)=name(.)]) = count(../*) and count(../*) > 1])">{</xsl:if>
+    <!--<xsl:if test="not(*[count(../*[name(../*)=name(.)]) = count(../*) and count(../*) > 1])">{</xsl:if>-->
 
     <!-- attributes -->
     <xsl:apply-templates select="@*" />
@@ -28,8 +28,8 @@
     <xsl:apply-templates select="child::node()" />
 
     <!-- close object (only when not dealing with an array) or separate object attributes -->
-    <xsl:if test="not(*[count(../*[name(../*)=name(.)]) = count(../*) and count(../*) > 1])">}</xsl:if>
-    <xsl:if test="following-sibling::* or following-sibling::text()">,</xsl:if>
+    <!--<xsl:if test="not(*[count(../*[name(../*)=name(.)]) = count(../*) and count(../*) > 1])">}</xsl:if>-->
+    <xsl:if test="following-sibling::* or following-sibling::text()">},</xsl:if>
   </xsl:template>
 
   <!-- process text nodes -->
@@ -39,7 +39,7 @@
 		<xsl:value-of select="count(preceding-sibling::text()) + 1"/>
 	</xsl:if>
 	<xsl:text>":</xsl:text>
-	
+
     <xsl:call-template name="format-value">
       <xsl:with-param name="s" select="." />
     </xsl:call-template>
@@ -61,14 +61,19 @@
 
   <!-- arrays -->
   <xsl:template match="*[count(../*[name(../*)=name(.)]) = count(../*) and count(../*) > 1]">
-    <xsl:if test="not(preceding-sibling::*)">[</xsl:if>
+    <xsl:if test="not(preceding-sibling::*)">
+      <xsl:text>"</xsl:text>
+      <xsl:value-of select="name(../../*)" />
+      <xsl:text>":[</xsl:text>
+    </xsl:if>
     <xsl:text>{"</xsl:text><xsl:value-of select="name()" /><xsl:text>":{</xsl:text>
 
     <xsl:apply-templates select="@*" />
+    <xsl:if test="@* and child::node()">,</xsl:if><!-- separate attributes from child nodes/text if necessary -->
     <xsl:apply-templates select="child::node()" />
 
-    <xsl:if test="following-sibling::*">}},</xsl:if>
-    <xsl:if test="not(following-sibling::*)">}}]</xsl:if>
+    <xsl:if test="following-sibling::*">}}},</xsl:if>
+    <xsl:if test="not(following-sibling::*)">}}}]}}</xsl:if>
   </xsl:template>
 
 
@@ -126,3 +131,4 @@
   </xsl:template>
 
 </xsl:stylesheet>
+
