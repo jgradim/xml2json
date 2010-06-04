@@ -27,6 +27,8 @@
     <xsl:if test="@* and child::node()">,</xsl:if><!-- separate attributes from child nodes/text if necessary -->
     <xsl:apply-templates select="child::node()" />
 
+    <xsl:if test="not(following-sibling::*)">}</xsl:if>
+
     <!-- close object (only when not dealing with an array) or separate object attributes -->
     <!--<xsl:if test="not(*[count(../*[name(../*)=name(.)]) = count(../*) and count(../*) > 1])">}</xsl:if>-->
     <xsl:if test="following-sibling::* or following-sibling::text()">},</xsl:if>
@@ -72,8 +74,8 @@
     <xsl:if test="@* and child::node()">,</xsl:if><!-- separate attributes from child nodes/text if necessary -->
     <xsl:apply-templates select="child::node()" />
 
-    <xsl:if test="following-sibling::*">}}},</xsl:if>
-    <xsl:if test="not(following-sibling::*)">}}}]}}</xsl:if>
+    <xsl:if test="following-sibling::*">}},</xsl:if>
+    <xsl:if test="not(following-sibling::*)">}}]</xsl:if>
   </xsl:template>
 
 
